@@ -1,4 +1,4 @@
-name: Test CUDA 10.2 conda env
+name: Test conda env creation
 
 on:
   schedule:
@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
+      matrix:
+        target: [cuda11.0, cuda10.2, cuda10.1]
 
     steps:
     - uses: actions/checkout@v2
@@ -29,6 +31,6 @@ jobs:
       run: |
         # $CONDA is an environment variable pointing to the root of the miniconda directory
         echo $CONDA/bin >> $GITHUB_PATH
-    - name: Create Conda environment with CUDA 10.2
+    - name: Create Conda environment with CUDA 10.1
       run: |
-        conda env create --file conda/environments/nvtabular_dev_cuda10.2.yml --name nvtabular_dev_10.2
+        conda env create --file conda/environments/nvtabular_dev_${{ matrix.target }}.yml --name nvtabular_dev_${{ matrix.target }}
